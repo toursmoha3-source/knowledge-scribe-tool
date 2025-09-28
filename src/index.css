@@ -2,41 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* MohaTours Travel Platform Design System
+   Inspired by travel and adventure with warm, inviting colors
+   All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base colors inspired by travel destinations */
+    --background: 35 25% 98%;
+    --foreground: 25 25% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 35 15% 97%;
+    --card-foreground: 25 25% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 35 15% 97%;
+    --popover-foreground: 25 25% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary: Warm sunset orange */
+    --primary: 25 85% 55%;
+    --primary-foreground: 35 25% 98%;
+    --primary-glow: 30 90% 65%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary: Sandy beige */
+    --secondary: 40 25% 92%;
+    --secondary-foreground: 25 25% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted: Soft earth tones */
+    --muted: 40 20% 94%;
+    --muted-foreground: 25 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent: Ocean blue */
+    --accent: 200 85% 60%;
+    --accent-foreground: 35 25% 98%;
 
+    /* Destructive colors */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs */
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 25 85% 55%;
 
-    --radius: 0.5rem;
+    /* Border radius */
+    --radius: 0.75rem;
+
+    /* Custom travel-themed colors */
+    --adventure: 15 85% 50%;
+    --adventure-foreground: 35 25% 98%;
+    
+    --nature: 120 40% 50%;
+    --nature-foreground: 35 25% 98%;
+
+    /* Gradients */
+    --gradient-sunset: linear-gradient(135deg, hsl(25 85% 55%), hsl(30 90% 65%), hsl(35 95% 70%));
+    --gradient-ocean: linear-gradient(135deg, hsl(200 85% 60%), hsl(220 80% 65%));
+    --gradient-hero: linear-gradient(135deg, hsl(25 85% 55%) 0%, hsl(200 85% 60%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(35 15% 97%), hsl(40 20% 94%));
+
+    /* Shadows with warm tones */
+    --shadow-warm: 0 4px 20px -4px hsl(25 85% 55% / 0.2);
+    --shadow-cool: 0 4px 20px -4px hsl(200 85% 60% / 0.2);
+    --shadow-elegant: 0 10px 40px -10px hsl(25 50% 30% / 0.3);
+    --shadow-glow: 0 0 30px hsl(25 85% 55% / 0.4);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
