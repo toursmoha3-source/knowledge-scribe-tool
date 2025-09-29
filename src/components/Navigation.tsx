@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, MapPin, Users, Search, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,27 +11,27 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
               <MapPin className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-foreground">MohaTours</span>
-          </div>
+            <span className="text-xl font-bold text-foreground">ToursConnect</span>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#guides" className="text-foreground hover:text-primary transition-colors font-medium">
+            <Link to="/find-guides" className="text-foreground hover:text-primary transition-colors font-medium">
               Find Guides
-            </a>
-            <a href="#itineraries" className="text-foreground hover:text-primary transition-colors font-medium">
+            </Link>
+            <Link to="/itineraries" className="text-foreground hover:text-primary transition-colors font-medium">
               Itineraries
-            </a>
-            <a href="#destinations" className="text-foreground hover:text-primary transition-colors font-medium">
+            </Link>
+            <Link to="/destinations" className="text-foreground hover:text-primary transition-colors font-medium">
               Destinations
-            </a>
-            <a href="#about" className="text-foreground hover:text-primary transition-colors font-medium">
+            </Link>
+            <Link to="/about" className="text-foreground hover:text-primary transition-colors font-medium">
               About
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Action Buttons */}
@@ -60,38 +61,38 @@ const Navigation = () => {
         {isOpen && (
           <div className="md:hidden py-4 border-t border-border/50">
             <div className="flex flex-col space-y-4">
-              <a 
-                href="#guides" 
+              <Link 
+                to="/find-guides" 
                 className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
                 <Users className="w-4 h-4" />
                 <span>Find Guides</span>
-              </a>
-              <a 
-                href="#itineraries" 
+              </Link>
+              <Link 
+                to="/itineraries" 
                 className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
                 <Search className="w-4 h-4" />
                 <span>Itineraries</span>
-              </a>
-              <a 
-                href="#destinations" 
+              </Link>
+              <Link 
+                to="/destinations" 
                 className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
                 <MapPin className="w-4 h-4" />
                 <span>Destinations</span>
-              </a>
-              <a 
-                href="#about" 
+              </Link>
+              <Link 
+                to="/about" 
                 className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors font-medium py-2"
                 onClick={() => setIsOpen(false)}
               >
                 <Heart className="w-4 h-4" />
                 <span>About</span>
-              </a>
+              </Link>
               
               <div className="flex flex-col space-y-2 pt-4 border-t border-border/50">
                 <Button variant="ghost" size="sm" className="justify-start">

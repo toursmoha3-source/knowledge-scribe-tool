@@ -14,7 +14,7 @@ const Footer = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
                 <MapPin className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold">MohaTours</span>
+              <span className="text-xl font-bold">ToursConnect</span>
             </div>
             <p className="text-background/80 leading-relaxed">
               Connecting travelers with certified, professional tour guides for safe and authentic travel experiences worldwide.
@@ -71,7 +71,7 @@ const Footer = () => {
             <div className="space-y-2 pt-4">
               <div className="flex items-center space-x-2 text-background/80">
                 <Mail className="w-4 h-4" />
-                <span className="text-sm">support@mohatours.com</span>
+                <span className="text-sm">support@toursconnect.com</span>
               </div>
               <div className="flex items-center space-x-2 text-background/80">
                 <Phone className="w-4 h-4" />
@@ -84,7 +84,7 @@ const Footer = () => {
         <div className="border-t border-background/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <p className="text-background/80 text-sm">
-              © {currentYear} MohaTours. All rights reserved.
+              © {currentYear} ToursConnect. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-background/80 hover:text-primary transition-colors text-sm">
