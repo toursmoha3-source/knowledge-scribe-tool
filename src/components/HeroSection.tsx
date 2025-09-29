@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Search, MapPin, Users, Star } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-travel.jpg";
 
 const HeroSection = () => {
@@ -31,14 +32,18 @@ const HeroSection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button variant="hero" size="lg" className="group">
-              <Search className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-              Find Your Guide
-            </Button>
-            <Button variant="premium" size="lg" className="group">
-              <MapPin className="w-5 h-5 group-hover:bounce transition-transform" />
-              Browse Itineraries
-            </Button>
+            <Link to="/find-guides">
+              <Button variant="hero" size="lg" className="group">
+                <Search className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                Find Your Guide
+              </Button>
+            </Link>
+            <Link to="/itineraries">
+              <Button variant="premium" size="lg" className="group">
+                <MapPin className="w-5 h-5 group-hover:bounce transition-transform" />
+                Browse Itineraries
+              </Button>
+            </Link>
           </div>
 
           {/* Stats */}
