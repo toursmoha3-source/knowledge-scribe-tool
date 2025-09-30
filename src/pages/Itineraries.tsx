@@ -2,15 +2,19 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Clock, Users, Star, Calendar, Heart, Filter } from "lucide-react";
+import { SearchFilters } from "@/components/SearchFilters";
+import { BookingCard } from "@/components/BookingCard";
+import { MessagingSystem } from "@/components/MessagingSystem";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Search, MapPin, Clock, Users, Star, Calendar, Heart, Filter, MessageCircle } from "lucide-react";
 
 const Itineraries = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDuration, setSelectedDuration] = useState("");
+  const [filters, setFilters] = useState<any>({});
+  const [selectedItinerary, setSelectedItinerary] = useState<any>(null);
+  const [showFilters, setShowFilters] = useState(false);
   
   // Mock data for itineraries
   const itineraries = [
@@ -110,14 +114,19 @@ const Itineraries = () => {
   const categories = ["All Categories", "Cultural & Historical", "Architecture & Food", "Nature & Culture", "Royal & Museums"];
 
   const filteredItineraries = itineraries.filter(itinerary => {
-    const matchesSearch = itinerary.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         itinerary.destination.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         itinerary.highlights.some(highlight => highlight.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesDuration = !selectedDuration || selectedDuration === "Any Duration" || 
-                           (selectedDuration === "1-3 days" && itinerary.duration <= 3) ||
-                           (selectedDuration === "4-7 days" && itinerary.duration >= 4 && itinerary.duration <= 7) ||
-                           (selectedDuration === "8+ days" && itinerary.duration >= 8);
-    return matchesSearch && matchesDuration;
+    if (filters.searchQuery) {
+      const matchesSearch = itinerary.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+                           itinerary.destination.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+                           itinerary.highlights.some(highlight => highlight.toLowerCase().includes(filters.searchQuery.toLowerCase()));
+      if (!matchesSearch) return false;
+    }
+    
+    if (filters.location && itinerary.destination !== filters.location) return false;
+    if (filters.rating && itinerary.rating < parseFloat(filters.rating)) return false;
+    if (filters.priceRange && (itinerary.price < filters.priceRange[0] || itinerary.price > filters.priceRange[1])) return false;
+    if (filters.specialty && itinerary.category !== filters.specialty) return false;
+    
+    return true;
   });
 
   return (
@@ -139,33 +148,21 @@ const Itineraries = () => {
                 Discover expertly crafted travel itineraries designed by our certified guides. From cultural immersions to adventure tours, find your perfect journey.
               </p>
               
-              {/* Search Bar */}
-              <div className="flex flex-col md:flex-row gap-4 max-w-3xl mx-auto">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                  <Input
-                    placeholder="Search itineraries, destinations, or activities..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 h-12 text-lg"
-                  />
-                </div>
-                <Select value={selectedDuration} onValueChange={setSelectedDuration}>
-                  <SelectTrigger className="md:w-48 h-12">
-                    <SelectValue placeholder="Duration" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {durations.map((duration) => (
-                      <SelectItem key={duration} value={duration}>
-                        {duration}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button variant="default" size="lg" className="h-12 px-8">
-                  <Filter className="w-5 h-5" />
-                  Filters
+              {/* Advanced Search Filters */}
+              <div className="max-w-4xl mx-auto">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="mb-4"
+                >
+                  {showFilters ? "Hide" : "Show"} Advanced Filters
                 </Button>
+                
+                {showFilters && (
+                  <div className="bg-card p-6 rounded-lg border mb-6">
+                    <SearchFilters onFiltersChange={setFilters} type="itineraries" />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -270,9 +267,40 @@ const Itineraries = () => {
                         <span className="text-2xl font-bold text-foreground">${itinerary.price}</span>
                         <span className="text-muted-foreground">/person</span>
                       </div>
-                      <Button variant="default" size="sm">
-                        View Details
-                      </Button>
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <MessageCircle className="w-4 h-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl max-h-[80vh]">
+                            <DialogHeader>
+                              <DialogTitle>Contact Guide</DialogTitle>
+                            </DialogHeader>
+                            <MessagingSystem />
+                          </DialogContent>
+                        </Dialog>
+                        
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="default" 
+                              size="sm"
+                              onClick={() => setSelectedItinerary(itinerary)}
+                            >
+                              <Calendar className="w-4 h-4 mr-1" />
+                              Book Trip
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-md">
+                            <DialogHeader>
+                              <DialogTitle>Book {itinerary.title}</DialogTitle>
+                            </DialogHeader>
+                            <BookingCard type="itinerary" item={itinerary} />
+                          </DialogContent>
+                        </Dialog>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

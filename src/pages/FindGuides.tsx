@@ -2,15 +2,19 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Users, Star, Clock, Filter, Award } from "lucide-react";
+import { SearchFilters } from "@/components/SearchFilters";
+import { BookingCard } from "@/components/BookingCard";
+import { MessagingSystem } from "@/components/MessagingSystem";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { MapPin, Users, Star, Clock, Award, MessageCircle, Calendar, Search } from "lucide-react";
 
 const FindGuides = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("");
+  const [filters, setFilters] = useState<any>({});
+  const [selectedGuide, setSelectedGuide] = useState<any>(null);
+  const [showFilters, setShowFilters] = useState(false);
   
   // Mock data for guides
   const guides = [
@@ -97,11 +101,20 @@ const FindGuides = () => {
   const locations = ["All Locations", "Barcelona, Spain", "Cairo, Egypt", "Kyoto, Japan", "Rome, Italy", "London, UK", "Rio de Janeiro, Brazil"];
 
   const filteredGuides = guides.filter(guide => {
-    const matchesSearch = guide.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         guide.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         guide.specializations.some(spec => spec.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesLocation = !selectedLocation || selectedLocation === "All Locations" || guide.location === selectedLocation;
-    return matchesSearch && matchesLocation;
+    if (filters.searchQuery) {
+      const matchesSearch = guide.name.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+                           guide.location.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+                           guide.specializations.some(spec => spec.toLowerCase().includes(filters.searchQuery.toLowerCase()));
+      if (!matchesSearch) return false;
+    }
+    
+    if (filters.location && guide.location !== filters.location) return false;
+    if (filters.rating && guide.rating < parseFloat(filters.rating)) return false;
+    if (filters.priceRange && (guide.hourlyRate < filters.priceRange[0] || guide.hourlyRate > filters.priceRange[1])) return false;
+    if (filters.language && !guide.languages.includes(filters.language)) return false;
+    if (filters.specialty && !guide.specializations.includes(filters.specialty)) return false;
+    
+    return true;
   });
 
   return (
@@ -123,33 +136,21 @@ const FindGuides = () => {
                 Connect with verified, professional tour guides worldwide. Discover hidden gems and create unforgettable memories with local experts.
               </p>
               
-              {/* Search Bar */}
-              <div className="flex flex-col md:flex-row gap-4 max-w-3xl mx-auto">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                  <Input
-                    placeholder="Search guides, destinations, or specializations..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 h-12 text-lg"
-                  />
-                </div>
-                <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                  <SelectTrigger className="md:w-64 h-12">
-                    <SelectValue placeholder="Select Location" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {locations.map((location) => (
-                      <SelectItem key={location} value={location}>
-                        {location}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button variant="default" size="lg" className="h-12 px-8">
-                  <Filter className="w-5 h-5" />
-                  Filters
+              {/* Advanced Search Filters */}
+              <div className="max-w-4xl mx-auto">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="mb-4"
+                >
+                  {showFilters ? "Hide" : "Show"} Advanced Filters
                 </Button>
+                
+                {showFilters && (
+                  <div className="bg-card p-6 rounded-lg border mb-6">
+                    <SearchFilters onFiltersChange={setFilters} type="guides" />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -241,9 +242,40 @@ const FindGuides = () => {
                         <span className="text-2xl font-bold text-foreground">${guide.hourlyRate}</span>
                         <span className="text-muted-foreground">/hour</span>
                       </div>
-                      <Button variant="default" size="sm">
-                        View Profile
-                      </Button>
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <MessageCircle className="w-4 h-4" />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl max-h-[80vh]">
+                            <DialogHeader>
+                              <DialogTitle>Send Message</DialogTitle>
+                            </DialogHeader>
+                            <MessagingSystem />
+                          </DialogContent>
+                        </Dialog>
+                        
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="default" 
+                              size="sm"
+                              onClick={() => setSelectedGuide(guide)}
+                            >
+                              <Calendar className="w-4 h-4 mr-1" />
+                              Book
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-md">
+                            <DialogHeader>
+                              <DialogTitle>Book {guide.name}</DialogTitle>
+                            </DialogHeader>
+                            <BookingCard type="guide" item={guide} />
+                          </DialogContent>
+                        </Dialog>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
