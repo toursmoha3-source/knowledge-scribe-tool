@@ -18,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import { GuideMessaging } from "./GuideMessaging";
+import { GuideCalendar } from "./GuideCalendar";
 
 export const ProfileDashboard = () => {
   const { user } = useAuth();
@@ -530,14 +531,16 @@ export const ProfileDashboard = () => {
 
           {/* Calendar Tab */}
           <TabsContent value="calendar">
-            <Card>
-              <CardHeader>
-                <CardTitle>Availability Calendar</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Calendar and availability management would be implemented here.</p>
-              </CardContent>
-            </Card>
+            {guideProfile && (
+              <GuideCalendar guideId={guideProfile.id} isOwnCalendar={true} />
+            )}
+            {!guideProfile && (
+              <Card>
+                <CardContent className="p-6 text-center text-muted-foreground">
+                  Please complete your guide profile first to access the calendar.
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Settings Tab */}

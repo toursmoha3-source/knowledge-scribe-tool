@@ -58,6 +58,18 @@ export const GuideMessaging = () => {
 
   const loadConversations = async () => {
     try {
+      // Get user's profile to find their user_id
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('user_id')
+        .eq('user_id', user?.id)
+        .single();
+
+      if (!userProfile) {
+        console.error('User profile not found');
+        return;
+      }
+
       const { data, error } = await supabase
         .from('conversations')
         .select(`
@@ -65,7 +77,7 @@ export const GuideMessaging = () => {
           profiles!conversations_participant_1_fkey(full_name, avatar_url, user_id),
           profiles!conversations_participant_2_fkey(full_name, avatar_url, user_id)
         `)
-        .or(`participant_1.eq.${user?.id},participant_2.eq.${user?.id}`)
+        .or(`participant_1.eq.${userProfile.user_id},participant_2.eq.${userProfile.user_id}`)
         .order('updated_at', { ascending: false });
 
       if (error) throw error;

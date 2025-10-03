@@ -4,10 +4,11 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin, Clock, Languages, Shield, MessageSquare, Calendar } from "lucide-react";
+import { Star, MapPin, Clock, Languages, Shield, MessageSquare, Calendar, CheckCircle } from "lucide-react";
 import { SearchFilters } from "@/components/SearchFilters";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BookingCard } from "@/components/BookingCard";
+import { GuideCalendar } from "@/components/GuideCalendar";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -165,12 +166,17 @@ const FindGuides = () => {
                         alt={guide.profiles?.full_name || "Guide"}
                         className="w-full h-full object-cover transition-transform hover:scale-105"
                       />
-                      {guide.is_approved && (
-                        <Badge className="absolute top-4 right-4 bg-primary">
-                          <Shield className="w-3 h-3 mr-1" />
-                          Verified
-                        </Badge>
-                      )}
+                      <div className="absolute top-4 right-4 flex flex-col gap-2">
+                        {guide.is_approved && (
+                          <Badge className="bg-primary">
+                            <Shield className="w-3 h-3 mr-1" />
+                            Verified
+                          </Badge>
+                        )}
+                        {guide.is_premium && (
+                          <Badge className="bg-secondary">Premium</Badge>
+                        )}
+                      </div>
                     </div>
 
                     <CardContent className="p-6">
@@ -224,6 +230,7 @@ const FindGuides = () => {
                             variant="outline"
                             size="icon"
                             onClick={() => handleContactGuide(guide)}
+                            title="Contact Guide"
                           >
                             <MessageSquare className="w-4 h-4" />
                           </Button>
@@ -232,22 +239,25 @@ const FindGuides = () => {
                             <DialogTrigger asChild>
                               <Button onClick={() => setSelectedGuide(guide)}>
                                 <Calendar className="w-4 h-4 mr-2" />
-                                Book Now
+                                View & Book
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                            <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                               <DialogHeader>
                                 <DialogTitle>Book {guide.profiles?.full_name}</DialogTitle>
                               </DialogHeader>
-                              <BookingCard
-                                type="guide"
-                                item={{
-                                  id: guide.id,
-                                  name: guide.profiles?.full_name,
-                                  hourlyRate: guide.hourly_rate,
-                                  image: guide.profiles?.avatar_url,
-                                }}
-                              />
+                              <div className="space-y-6">
+                                <GuideCalendar guideId={guide.id} isOwnCalendar={false} />
+                                <BookingCard
+                                  type="guide"
+                                  item={{
+                                    id: guide.id,
+                                    name: guide.profiles?.full_name,
+                                    hourlyRate: guide.hourly_rate,
+                                    image: guide.profiles?.avatar_url,
+                                  }}
+                                />
+                              </div>
                             </DialogContent>
                           </Dialog>
                         </div>
