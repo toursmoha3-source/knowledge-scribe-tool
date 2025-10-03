@@ -18,12 +18,14 @@ export type Database = {
         Row: {
           booking_date: string
           created_at: string
+          end_date: string | null
           group_size: number
           guide_id: string
           id: string
           itinerary_id: string
           payment_status: string | null
           special_requests: string | null
+          start_date: string | null
           status: string | null
           total_amount: number
           tourist_id: string
@@ -32,12 +34,14 @@ export type Database = {
         Insert: {
           booking_date: string
           created_at?: string
+          end_date?: string | null
           group_size: number
           guide_id: string
           id?: string
           itinerary_id: string
           payment_status?: string | null
           special_requests?: string | null
+          start_date?: string | null
           status?: string | null
           total_amount: number
           tourist_id: string
@@ -46,12 +50,14 @@ export type Database = {
         Update: {
           booking_date?: string
           created_at?: string
+          end_date?: string | null
           group_size?: number
           guide_id?: string
           id?: string
           itinerary_id?: string
           payment_status?: string | null
           special_requests?: string | null
+          start_date?: string | null
           status?: string | null
           total_amount?: number
           tourist_id?: string
@@ -104,6 +110,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      guide_availability: {
+        Row: {
+          created_at: string
+          date: string
+          guide_id: string
+          id: string
+          is_available: boolean | null
+          slots_booked: number | null
+          slots_total: number | null
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          guide_id: string
+          id?: string
+          is_available?: boolean | null
+          slots_booked?: number | null
+          slots_total?: number | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          guide_id?: string
+          id?: string
+          is_available?: boolean | null
+          slots_booked?: number | null
+          slots_total?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guide_availability_guide_id_fkey"
+            columns: ["guide_id"]
+            isOneToOne: false
+            referencedRelation: "guides"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       guides: {
         Row: {
