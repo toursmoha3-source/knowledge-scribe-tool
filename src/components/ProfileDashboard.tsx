@@ -19,6 +19,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 import { GuideMessaging } from "./GuideMessaging";
 import { GuideCalendar } from "./GuideCalendar";
+import { GuideBookings } from "./GuideBookings";
 
 export const ProfileDashboard = () => {
   const { user } = useAuth();
@@ -519,14 +520,17 @@ export const ProfileDashboard = () => {
 
           {/* Bookings Tab */}
           <TabsContent value="bookings">
-            <Card>
-              <CardHeader>
-                <CardTitle>Booking Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Booking management interface would be implemented here.</p>
-              </CardContent>
-            </Card>
+            {guideProfile ? (
+              <GuideBookings guideId={guideProfile.id} />
+            ) : (
+              <Card>
+                <CardContent className="p-12 text-center">
+                  <p className="text-muted-foreground">
+                    Please complete your guide profile first to manage bookings.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           {/* Calendar Tab */}
